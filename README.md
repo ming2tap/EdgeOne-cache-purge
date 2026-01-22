@@ -22,7 +22,7 @@
 
 1. **克隆项目**
    ```bash
-   git clone https://github.com/your-username/edgeone-cache-purge.git
+   git clone https://github.com/ming2tap/EdgeOne-cache-purge.git
    cd edgeone-cache-purge
    ```
 
@@ -139,3 +139,4 @@ MIT License
 ## 🤝 贡献
 
 欢迎提交 Issue 和 Pull Request！
+
