@@ -26,36 +26,18 @@
    cd edgeone-cache-purge
    ```
 
-2. **配置环境变量（可选）**
-   
-   创建 `.env` 文件：
+2. **启动服务**
    ```bash
-   # Linux/Mac
-   cat > .env << EOF
-   SECRET_KEY=$(openssl rand -hex 32)
-   ADMIN_PASSWORD=your-admin-password
-   EOF
-   ```
-   
-   ```powershell
-   # Windows (PowerShell)
-   @"
-   SECRET_KEY=your-secret-key-change-this-in-production
-   ADMIN_PASSWORD=your-admin-password
-   "@ | Out-File -FilePath .env -Encoding utf8
+   docker compose up -d
    ```
 
-3. **启动服务**
-   ```bash
-   docker-compose up -d
-   ```
-
-4. **访问应用**
+3. **访问应用**
    
    打开浏览器访问：http://localhost:5000
    
    - 默认用户名：`admin`
-   - 默认密码：`.env` 文件中的 `ADMIN_PASSWORD`（默认为 `admin123`）
+   - 默认密码：`docker-compose.yml` 文件中的 `ADMIN_PASSWORD`（默认为 `admin123`）
+   - 测试使用可以使用默认密码 正式部署建议修改
 
 ## 📖 使用说明
 
@@ -95,6 +77,8 @@
 | `SECRET_KEY` | Flask session 加密密钥 | `change-this-secret-key-in-production` |
 | `ADMIN_PASSWORD` | 管理员密码 | `admin123` |
 
+ - 测试使用可以使用默认密码 正式部署建议修改
+
 ### 数据持久化
 
 数据库文件存储在 `./data` 目录中，通过 Docker volume 挂载实现数据持久化。
@@ -103,19 +87,19 @@
 
 ```bash
 # 启动服务
-docker-compose up -d
+docker compose up -d
 
 # 停止服务
-docker-compose down
+docker compose down
 
 # 查看日志
-docker-compose logs -f
+docker compose logs -f
 
 # 重启服务
-docker-compose restart
+docker compose restart
 
 # 查看服务状态
-docker-compose ps
+docker compose ps
 ```
 
 ## 🔒 安全建议
@@ -139,4 +123,5 @@ MIT License
 ## 🤝 贡献
 
 欢迎提交 Issue 和 Pull Request！
+
 
