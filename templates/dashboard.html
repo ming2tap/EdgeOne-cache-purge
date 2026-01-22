@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdgeOne 缓存清除工具 - 控制台</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>EdgeOne 缓存清除工具</h1>
+            <div class="user-info">
+                <span>欢迎, <strong>{{ current_user.username }}</strong></span>
+                <a href="{{ url_for('logout') }}" class="btn btn-secondary">退出</a>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="config">配置管理</button>
+            <button class="tab-btn" data-tab="purge">缓存清除</button>
+        </nav>
+
+        <!-- 配置管理标签页 -->
+        <div id="configTab" class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h2>配置列表</h2>
+                    <button class="btn btn-primary" onclick="showAddConfigModal()">添加配置</button>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th>SecretId</th>
+                                <th>ZoneId</th>
+                                <th>区域</th>
+                                <th>更新时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="configTableBody">
+                            <tr>
+                                <td colspan="6" class="text-center">加载中...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 缓存清除标签页 -->
+        <div id="purgeTab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>清除缓存</h2>
+                </div>
+                <div class="card-body">
+                    <form id="purgeForm">
+                        <div class="form-group">
+                            <label for="purgeConfig">选择配置 *</label>
+                            <select id="purgeConfig" name="config_id" required>
+                                <option value="">请选择配置</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="purgeType">清除类型 *</label>
+                            <select id="purgeType" name="type" required>
+                                <option value="purge_all">清除所有缓存</option>
+                                <option value="purge_url">按URL清除</option>
+                                <option value="purge_prefix">按目录清除</option>
+                                <option value="purge_host">按主机名清除</option>
+                                <option value="purge_cache_tag">按缓存标签清除</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="purgeMethod">清除方法 *</label>
+                            <select id="purgeMethod" name="method" required>
+                                <option value="invalidate">标记过期</option>
+                                <option value="delete">直接删除</option>
+                            </select>
+                            <small class="form-hint">
+                                <strong>标记过期：</strong>节点会回源校验资源是否有更新，仅当源站有更新资源才会拉取完整文件，对源站带宽影响较小<br>
+                                <strong>直接删除：</strong>直接删除节点缓存，下次请求时立即从源站拉取最新资源，可能对源站造成较大压力
+                            </small>
+                        </div>
+                        <div class="form-group" id="targetsGroup" style="display: none;">
+                            <label for="targets">目标（每行一个）</label>
+                            <textarea id="targets" name="targets" rows="5" placeholder="例如：&#10;https://example.com/page1&#10;https://example.com/page2"></textarea>
+                            <small class="form-hint">每行输入一个URL、目录路径、主机名或缓存标签</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary">提交清除任务</button>
+                        <div id="purgeResult" class="result-message"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加/编辑配置模态框 -->
+    <div id="configModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">添加配置</h2>
+                <span class="close" onclick="closeConfigModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="configForm">
+                    <input type="hidden" id="configId" name="id">
+                    <div class="form-group">
+                        <label for="configName">配置名称</label>
+                        <input type="text" id="configName" name="name" placeholder="例如：生产环境">
+                    </div>
+                    <div class="form-group">
+                        <label for="secretId">SecretId *</label>
+                        <input type="text" id="secretId" name="secret_id" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="secretKey">SecretKey *</label>
+                        <input type="password" id="secretKey" name="secret_key" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="zoneId">站点ID (ZoneId) *</label>
+                        <input type="text" id="zoneId" name="zone_id" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="region">区域 *</label>
+                        <select id="region" name="region" required>
+                            <option value="cn">国内版</option>
+                            <option value="intl">国际版</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeConfigModal()">取消</button>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
