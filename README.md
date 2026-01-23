@@ -2,6 +2,10 @@
 
 一个基于 Docker Compose 部署的 EdgeOne 缓存清除 Web 工具，支持配置管理和批量缓存清除。
 
+![image.png](https://nos.netease.com/ysf/e37527fd1c2add6c6ac901756157b251.png)
+![image.png](https://nos.netease.com/ysf/a433af24da7b6d6c3a10076c47f876ff.png)
+![image.png](https://nos.netease.com/ysf/6d825e8303b6821b903a4092495b4a66.png)
+
 ## ✨ 功能特性
 
 - 🔐 **密码登录保护** - 安全的访问控制
@@ -123,5 +127,6 @@ MIT License
 ## 🤝 贡献
 
 欢迎提交 Issue 和 Pull Request！
+
 
 
